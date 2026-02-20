@@ -32,7 +32,7 @@ const COUNTRY_PROFILES: Record<string, CountryProfile> = {
         central_bank: "НБГ", central_bank_full: "Национальный Банк Грузии",
         central_bank_api: "https://nbg.gov.ge/gw/api/ct/monetarypolicy/currencies/en/json",
         street_exchange: "Valuto/Rico",
-        default_rates: { nbg: 3.16, street: 3.14, direct: 3.02, eur_usd: 1.175, usd_local: 2.67 }
+        default_rates: { nbg: 3.16, street: 3.14, direct: 3.0460, eur_usd: 1.175, usd_local: 2.67 }
     },
     serbia: {
         name: "Сербия", flag: "🇷🇸", city: "Белград",
@@ -244,8 +244,8 @@ function changeCountry(key: string) {
     DOM.usdGelRate.value = rates.usd_local.toString();
 
     // Reset direct calc helpers
-    DOM.directRecv.value = (100 * rates.direct).toFixed(1);
-    DOM.directSpent.value = "100.00";
+    DOM.directRecv.value = "410.0";
+    DOM.directSpent.value = "134.60";
 
     calculate();
 }
