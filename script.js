@@ -117,14 +117,21 @@ function initApp() {
     DOM.countrySelect.addEventListener('change', (e) => changeCountry(e.target.value));
     DOM.themeBtn.addEventListener('click', toggleTheme);
     DOM.autoRatesBtn.addEventListener('click', fetchAllRates);
-    // Listen to all inputs for live calculation
+    // Listen to all inputs for live calculation and mobile keyboard events
     document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('input', () => {
+        const handleRecalc = () => {
             if (input.id === 'direct-recv' || input.id === 'direct-spent') {
                 updateImpliedDirectRate();
             }
             calculate();
-        });
+        };
+        input.addEventListener('input', handleRecalc);
+        input.addEventListener('change', handleRecalc);
+    });
+    // Explicit manual calculation button
+    document.getElementById('manual-calc-btn')?.addEventListener('click', () => {
+        calculate();
+        showToast("Данные пересчитаны", "success");
     });
     changeCountry('georgia');
 }
