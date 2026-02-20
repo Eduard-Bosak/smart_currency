@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Currency Arbitrage Calculator</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome (for icons) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Header -->
+      <header class="top-nav glass">
+        <div class="logo">
+          <i class="fa-solid fa-sync-alt fa-spin-hover"></i>
+          <h1><span class="gradient-text">CURRENCY</span> ARBITRAGE</h1>
+        </div>
+
+        <div class="nav-controls">
+          <button id="theme-toggle" class="icon-btn" title="Переключить тему">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <div class="country-selector">
+            <img
+              id="current-flag"
+              src="https://flagcdn.com/24x18/ge.png"
+              alt="Флаг"
+            />
+            <select id="country-select" class="glass-input">
+              <!-- Will be populated by JS -->
+            </select>
+          </div>
+          <button id="auto-rates-btn" class="primary-btn">
+            <i class="fa-solid fa-cloud-arrow-down"></i> Авто-Курсы
+          </button>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="dashboard">
+        <!-- Left Column: Inputs -->
+        <section class="panel inputs-panel glass" id="scroll-inputs">
+          <div class="panel-header">
+            <h2><i class="fa-solid fa-sliders"></i> Настройки</h2>
+          </div>
+
+          <div class="input-group highlight-box">
+            <label>Сумма траты (EUR)</label>
+            <div class="amount-input-wrapper">
+              <i class="fa-solid fa-euro-sign"></i>
+              <input
+                type="number"
+                id="spend-amount"
+                value="100.0"
+                step="1"
+                class="large-input"
+              />
+            </div>
+          </div>
+
+          <!-- Default Bank Rate -->
+          <div class="method-card nbg-card">
+            <div class="card-header blue-header">
+              <i class="fa-solid fa-building-columns"></i>
+              <h3 id="label-central-bank">ЭТАЛОН (НБГ)</h3>
+            </div>
+            <div class="card-body">
+              <label
+                >Курс ЦБ (1 EUR =
+                <span class="local-currency">GEL</span>)</label
+              >
+              <input type="number" id="nbg-rate" value="3.1595" step="0.0001" />
+            </div>
+          </div>
+
+          <!-- Method 1 -->
+          <div class="method-card">
+            <div class="card-header red-header">
+              <i class="fa-solid fa-credit-card"></i>
+              <h3>МЕТОД 1: Прямая оплата картой</h3>
+            </div>
+            <div class="card-body">
+              <div class="transaction-calculator">
+                <span class="calc-label"
+                  ><i class="fa-solid fa-calculator"></i> Калькулятор курса из
+                  транзакции</span
+                >
+                <div class="calc-row">
+                  <label
+                    >Получил <span class="local-currency">GEL</span>:
+                    <input
+                      type="number"
+                      id="direct-recv"
+                      value="19.0"
+                      step="0.1"
+                  /></label>
+                  <label
+                    >Списали EUR:
+                    <input
+                      type="number"
+                      id="direct-spent"
+                      value="6.29"
+                      step="0.01"
+                  /></label>
+                </div>
+              </div>
+              <label>Используемый курс:</label>
+              <input
+                type="number"
+                id="direct-rate"
+                value="3.0207"
+                step="0.0001"
+              />
+            </div>
+          </div>
+
+          <!-- Method 2 -->
+          <div class="method-card">
+            <div class="card-header orange-header">
+              <i class="fa-solid fa-money-bill-transfer"></i>
+              <h3>МЕТОД 2: Перевод IBT → Credo</h3>
+            </div>
+            <div class="card-body">
+              <label>Комиссия перевода (%)</label>
+              <input
+                type="number"
+                id="transfer-fee-pct"
+                value="1.5"
+                step="0.1"
+              />
+              <label>Курс конвертации (EUR → USD)</label>
+              <input
+                type="number"
+                id="eur-usd-rate"
+                value="1.175"
+                step="0.001"
+              />
+              <label>Внутренний курс банка (USD → <span class="local-currency">GEL</span>)</label>
+              <input
+                type="number"
+                id="usd-gel-rate"
+                value="2.672"
+                step="0.0001"
+              />
+            </div>
+          </div>
+
+          <!-- Method 3 -->
+          <div class="method-card">
+            <div class="card-header green-header">
+              <i class="fa-solid fa-money-bill-wave"></i>
+              <h3 id="label-street-exchange">МЕТОД 3: Наличные + Valuto</h3>
+            </div>
+            <div class="card-body">
+              <label>Комиссия банкомата (%)</label>
+              <input type="number" id="atm-fee-pct" value="1.5" step="0.1" />
+              <label>Фикс. комиссия ATM (EUR)</label>
+              <input type="number" id="atm-fee-fix" value="1.0" step="0.1" />
+              <label
+                >Курс обменника (1 EUR =
+                <span class="local-currency">GEL</span>)</label
+              >
+              <input
+                type="number"
+                id="street-rate"
+                value="3.143"
+                step="0.0001"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- Center Column: Results Table -->
+        <section class="panel results-panel glass">
+          <div class="panel-header">
+            <h2>
+              <i class="fa-solid fa-clipboard-list"></i> Результаты сравнения
+            </h2>
+          </div>
+          <div class="table-container">
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th>Метод</th>
+                  <th style="text-align: right">Получите (<span class="local-currency">GEL</span>)</th>
+                  <th style="text-align: right">Потери (<span class="local-currency">GEL</span>, %)</th>
+                </tr>
+              </thead>
+              <tbody id="results-tbody">
+                <!-- Rows injected by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Banner at the bottom of center panel -->
+          <div class="recommendation-banner glass-card" id="winner-banner">
+            <div class="banner-icon" id="banner-icon">🏆</div>
+            <div class="banner-content">
+              <h2 id="banner-title" class="profit-text">СНИМАЙТЕ НАЛИЧНЫЕ!</h2>
+              <p id="banner-subtitle">Идите в Valuto/Rico. Это выгоднее</p>
+            </div>
+            <div class="banner-savings">
+              <span class="savings-amount profit-text" id="banner-savings-value"
+                >+5.00 ₾</span
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- Right Column: Chart -->
+        <section class="panel chart-panel glass">
+          <div class="panel-header">
+            <h2><i class="fa-solid fa-chart-bar"></i> Визуализация</h2>
+          </div>
+
+          <h3 class="chart-subtitle">Сравнение методов</h3>
+          <div class="chart-container" id="chart-container">
+            <!-- Progress bars injected by JS -->
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Toast Notification System -->
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

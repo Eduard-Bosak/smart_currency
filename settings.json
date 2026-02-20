@@ -1,0 +1,17 @@
+{
+  "country": "georgia",
+  "nbg_rate": 3.1566,
+  "eur_usd_rate": 1.1753,
+  "usd_gel_rate": 2.672,
+  "street_rate": 3.138,
+  "direct_implied_rate": 3.02,
+  "ibt_transfer_fee": 1.5,
+  "atm_fee_pct": 1.5,
+  "atm_fee_fix": 1.0,
+  "last_amount": 600.0,
+  "theme": "dark",
+  "nbg_date": "20.02.2026",
+  "direct_date": "10.01.2026",
+  "transfer_date": "10.01.2026",
+  "cash_date": "10.01.2026"
+}
